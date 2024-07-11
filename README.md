@@ -1,2 +1,7 @@
-# EcoClean
-Solving trash problem by teaching how to turn it into Hand made craft items. Garuda hack 5.0 Project.
+# Eco Create
+
+A new Flutter project.
+
+## Getting Started
+
+FlutterFlow projects are built to run on the Flutter _stable_ release.

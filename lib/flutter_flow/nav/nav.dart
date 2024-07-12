@@ -1,15 +1,15 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
+
+import '/backend/schema/structs/index.dart';
 
 
 import '/auth/base_auth_user_provider.dart';
 
 import '/index.dart';
 import '/main.dart';
-import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 
 export 'package:go_router/go_router.dart';
@@ -75,13 +75,13 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
       debugLogDiagnostics: true,
       refreshListenable: appStateNotifier,
       errorBuilder: (context, state) =>
-          appStateNotifier.loggedIn ? const NavBarPage() : const SignupPageWidget(),
+          appStateNotifier.loggedIn ? const NavBarPage() : const LoginPageWidget(),
       routes: [
         FFRoute(
           name: '_initialize',
           path: '/',
           builder: (context, _) =>
-              appStateNotifier.loggedIn ? const NavBarPage() : const SignupPageWidget(),
+              appStateNotifier.loggedIn ? const NavBarPage() : const LoginPageWidget(),
         ),
         FFRoute(
           name: 'SignupPage',
@@ -106,13 +106,6 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               : const HomePageWidget(),
         ),
         FFRoute(
-          name: 'AiChatPage',
-          path: '/aiChatPage',
-          builder: (context, params) => params.isEmpty
-              ? const NavBarPage(initialPage: 'AiChatPage')
-              : const AiChatPageWidget(),
-        ),
-        FFRoute(
           name: 'EventPage',
           path: '/eventPage',
           builder: (context, params) => params.isEmpty
@@ -125,8 +118,26 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           builder: (context, params) => params.isEmpty
               ? const NavBarPage(initialPage: 'ProfilePage')
               : const ProfilePageWidget(),
+        ),
+        FFRoute(
+          name: 'DetailsEvent',
+          path: '/detailsEvent',
+          builder: (context, params) => const DetailsEventWidget(),
+        ),
+        FFRoute(
+          name: 'DetailsVideo',
+          path: '/detailsVideo',
+          builder: (context, params) => const DetailsVideoWidget(),
+        ),
+        FFRoute(
+          name: 'AiChatPage',
+          path: '/aiChatPage',
+          builder: (context, params) => params.isEmpty
+              ? const NavBarPage(initialPage: 'AiChatPage')
+              : const AiChatPageWidget(),
         )
       ].map((r) => r.toRoute(appStateNotifier)).toList(),
+      observers: [routeObserver],
     );
 
 extension NavParamExtensions on Map<String, String?> {
@@ -243,6 +254,7 @@ class FFParameters {
     String paramName,
     ParamType type, {
     bool isList = false,
+    StructBuilder<T>? structBuilder,
   }) {
     if (futureParamValues.containsKey(paramName)) {
       return futureParamValues[paramName];
@@ -260,6 +272,7 @@ class FFParameters {
       param,
       type,
       isList,
+      structBuilder: structBuilder,
     );
   }
 }
@@ -293,7 +306,7 @@ class FFRoute {
 
           if (requireAuth && !appStateNotifier.loggedIn) {
             appStateNotifier.setRedirectLocationIfUnset(state.uri.toString());
-            return '/signupPage';
+            return '/loginPage';
           }
           return null;
         },
@@ -307,14 +320,11 @@ class FFRoute {
                 )
               : builder(context, ffParams);
           final child = appStateNotifier.loading
-              ? Center(
-                  child: SizedBox(
-                    width: 50.0,
-                    height: 50.0,
-                    child: SpinKitFadingFour(
-                      color: FlutterFlowTheme.of(context).primary,
-                      size: 50.0,
-                    ),
+              ? Container(
+                  color: const Color(0xFFD9D9D9),
+                  child: Image.asset(
+                    'assets/images/Frame_3.png',
+                    fit: BoxFit.contain,
                   ),
                 )
               : page;

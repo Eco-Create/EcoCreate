@@ -10,6 +10,13 @@ class AiChatPageModel extends FlutterFlowModel<AiChatPageWidget> {
   FocusNode? textFieldFocusNode;
   TextEditingController? textController;
   String? Function(BuildContext, String?)? textControllerValidator;
+  bool isDataUploading = false;
+  FFUploadedFile uploadedLocalFile =
+      FFUploadedFile(bytes: Uint8List.fromList([]));
+  String uploadedFileUrl = '';
+
+  // Stores action output result for [Custom Action - invokeAI] action in IconButton widget.
+  dynamic aiInvoke;
 
   @override
   void initState(BuildContext context) {}

@@ -26,9 +26,12 @@ class UploadsRow extends SupabaseDataRow {
   String get by => getField<String>('by')!;
   set by(String value) => setField<String>('by', value);
 
-  String? get description => getField<String>('description');
-  set description(String? value) => setField<String>('description', value);
+  int get type => getField<int>('type')!;
+  set type(int value) => setField<int>('type', value);
 
-  dynamic get dataField => getField<dynamic>('data')!;
-  set dataField(dynamic value) => setField<dynamic>('data', value);
+  String get content => getField<String>('content')!;
+  set content(String value) => setField<String>('content', value);
+
+  dynamic get details => getField<dynamic>('details')!;
+  set details(dynamic value) => setField<dynamic>('details', value);
 }

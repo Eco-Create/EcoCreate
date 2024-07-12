@@ -1,3 +1,4 @@
+import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -9,7 +10,7 @@ import 'auth/supabase_auth/auth_util.dart';
 import '/backend/supabase/supabase.dart';
 import 'flutter_flow/flutter_flow_theme.dart';
 import 'flutter_flow/flutter_flow_util.dart';
-import 'flutter_flow/nav/nav.dart';
+import 'flutter_flow/internationalization.dart';
 import 'index.dart';
 
 void main() async {
@@ -19,7 +20,13 @@ void main() async {
 
   await SupaFlow.initialize();
 
-  runApp(const MyApp());
+  final appState = FFAppState(); // Initialize FFAppState
+  await appState.initializePersistedState();
+
+  runApp(ChangeNotifierProvider(
+    create: (context) => appState,
+    child: const MyApp(),
+  ));
 }
 
 class MyApp extends StatefulWidget {
@@ -34,6 +41,8 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  Locale? _locale;
+
   ThemeMode _themeMode = ThemeMode.system;
 
   late AppStateNotifier _appStateNotifier;
@@ -58,6 +67,10 @@ class _MyAppState extends State<MyApp> {
     );
   }
 
+  void setLocale(String language) {
+    setState(() => _locale = createLocale(language));
+  }
+
   void setThemeMode(ThemeMode mode) => setState(() {
         _themeMode = mode;
       });
@@ -67,11 +80,15 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp.router(
       title: 'Eco Create',
       localizationsDelegates: const [
+        FFLocalizationsDelegate(),
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
-      supportedLocales: const [Locale('en', '')],
+      locale: _locale,
+      supportedLocales: const [
+        Locale('en'),
+      ],
       theme: ThemeData(
         brightness: Brightness.light,
       ),
@@ -149,7 +166,7 @@ class _NavBarPageState extends State<NavBarPage> {
               Icons.event_note,
               size: 24.0,
             ),
-            label: 'Home',
+            label: 'Events',
             tooltip: '',
           ),
           BottomNavigationBarItem(

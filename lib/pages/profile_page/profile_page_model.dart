@@ -1,3 +1,4 @@
+import '/components/user_video_widget.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import 'profile_page_widget.dart' show ProfilePageWidget;
 import 'package:flutter/material.dart';
@@ -11,12 +12,18 @@ class ProfilePageModel extends FlutterFlowModel<ProfilePageWidget> {
   int get tabBarCurrentIndex =>
       tabBarController != null ? tabBarController!.index : 0;
 
+  // Model for User_Video component.
+  late UserVideoModel userVideoModel;
+
   @override
-  void initState(BuildContext context) {}
+  void initState(BuildContext context) {
+    userVideoModel = createModel(context, () => UserVideoModel());
+  }
 
   @override
   void dispose() {
     unfocusNode.dispose();
     tabBarController?.dispose();
+    userVideoModel.dispose();
   }
 }
